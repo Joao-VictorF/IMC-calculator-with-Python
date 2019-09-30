@@ -4,6 +4,7 @@ import pickle
 
 class Interface:
   calcs = 0
+  mI = 0
   def __init__(self, master = None):
     # Criando o 1 container
     self.titleContainer = Frame(master)
@@ -31,11 +32,11 @@ class Interface:
     self.resultContainer = Frame(master)
     self.resultContainer.pack()
 
-    self.titleContainer['bg'] = 'gray25'
-    self.pesoContainer['bg'] = 'gray25'
-    self.alturaContainer['bg'] = 'gray25'
-    self.enviarContainer['bg'] = 'gray25'
-    self.resultContainer['bg'] = 'gray25'
+    self.titleContainer['bg'] = 'SlateGray4'
+    self.pesoContainer['bg'] = 'SlateGray4'
+    self.alturaContainer['bg'] = 'SlateGray4'
+    self.enviarContainer['bg'] = 'SlateGray4'
+    self.resultContainer['bg'] = 'SlateGray4'
 
     
     
@@ -53,7 +54,6 @@ class Interface:
     self.pesoLabel["fg"] = 'white'
     self.pesoLabel.pack(side=TOP)
 
-    # Input para o peso da pessoa
     self.peso = Entry(self.pesoContainer)
     self.peso["width"] = 30
     self.peso["font"] = ("Calibri", "13")
@@ -65,7 +65,6 @@ class Interface:
     self.alturaLabel["fg"] = 'white'
     self.alturaLabel.pack(side=TOP)
 
-    # Input para o altura da pessoa
     self.altura = Entry(self.alturaContainer)
     self.altura["width"] = 30
     self.altura["font"] = ("Calibri", "13")
@@ -87,10 +86,10 @@ class Interface:
     self.feedback["padx"] = 20
     self.feedback.pack()
 
-    self.titleLabel['bg'] = 'gray25'
-    self.pesoLabel['bg'] = 'gray25'
-    self.alturaLabel['bg'] = 'gray25'
-    self.feedback['bg'] = 'gray25'
+    self.titleLabel['bg'] = 'SlateGray4'
+    self.pesoLabel['bg'] = 'SlateGray4'
+    self.alturaLabel['bg'] = 'SlateGray4'
+    self.feedback['bg'] = 'SlateGray4'
 
 
   def enviar(self):
@@ -116,12 +115,14 @@ class Interface:
       if result:
         self.showResult()
         if self.calcs > 0:
-          # print('clear')
           self.imcLabel.destroy()
           self.resultLabel.destroy()
           self.imageC.destroy()
           self.space.destroy()
-          self.calcular.destroy()
+          self.calcular.destroy()        
+          if self.mI > 0:
+            self.massaIdeal.destroy()
+            self.mI = 0
 
         imc = "IMC = " + str(result['imc'])
         self.imcLabel = Label(self.resultContainer, text=imc)
@@ -137,16 +138,29 @@ class Interface:
         self.resultLabel["fg"] = 'white'
         self.resultLabel.pack ()
 
-        imagem = PhotoImage(file=result['img'])
+        imgUrl = PhotoImage(file=result['img'])
 
-        self.imageC = Label(self.resultContainer, image=imagem)
-        self.imageC.imagem = imagem
+        self.imageC = Label(self.resultContainer, image=imgUrl)
+        self.imageC.imagem = imgUrl
         self.imageC.pack()
 
         self.space = Label(self.resultContainer, text="")
         self.space['pady'] = 5
         self.space.pack ()
-        
+
+        if result['mI'] > 0:
+          diferenca = round(result['mI']-float(self.peso.get()), 1)
+          if result['mI'] > float(self.peso.get()):
+            massaIdeal = "Você deveria pesar " + str(result['mI']) + ' Kg para estar com o peso normal. Ganhe ' + str(diferenca) + ' Kg'
+          else:
+            massaIdeal = "Você deveria pesar " + str(result['mI']) + ' Kg para estar com o peso normal. Perca ' + str(diferenca*-1) + ' Kg'
+          self.massaIdeal = Label(self.resultContainer, text=massaIdeal)
+          self.massaIdeal["font"] = ("Calibri", "18",)
+          self.massaIdeal['pady'] = 5 
+          self.massaIdeal["fg"] = 'white'
+          self.massaIdeal.pack ()
+          self.mI = 1
+
         self.calcular = Button(self.resultContainer)
         self.calcular["text"] = "Voltar ao inicio"
         self.calcular["font"] = ("Calibri", "13")
@@ -156,10 +170,12 @@ class Interface:
 
         self.calcs += 1
 
-        self.imcLabel['bg'] = 'gray25'
-        self.resultLabel['bg'] = 'gray25'
-        self.imageC['bg'] = 'gray25'
-        self.space['bg'] = 'gray25'
+        self.imcLabel['bg'] = 'SlateGray4'
+        self.resultLabel['bg'] = 'SlateGray4'
+        self.imageC['bg'] = 'SlateGray4'
+        self.space['bg'] = 'SlateGray4'
+        if self.mI > 0:
+          self.massaIdeal['bg'] = 'SlateGray4'
 
       else :
         return;  
@@ -191,7 +207,7 @@ class Interface:
 
   def start ():
     root = Tk()
-    root.geometry("600x350")
-    root.configure(bg='gray25')
+    root.geometry("800x350")
+    root.configure(bg='SlateGray4')
     Interface(root) 
     root.mainloop() 
