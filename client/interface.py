@@ -32,14 +32,13 @@ class Interface:
     self.resultContainer = Frame(master)
     self.resultContainer.pack()
 
+    # Mudando cor de background dos containers
     self.titleContainer['bg'] = 'SlateGray4'
     self.pesoContainer['bg'] = 'SlateGray4'
     self.alturaContainer['bg'] = 'SlateGray4'
     self.enviarContainer['bg'] = 'SlateGray4'
     self.resultContainer['bg'] = 'SlateGray4'
 
-    
-    
     # --------------------------------------------------------------
 
     # Mostrando o titulo da interface no container 1
@@ -86,6 +85,7 @@ class Interface:
     self.feedback["padx"] = 20
     self.feedback.pack()
 
+    # Mudando cor de background dos Labels
     self.titleLabel['bg'] = 'SlateGray4'
     self.pesoLabel['bg'] = 'SlateGray4'
     self.alturaLabel['bg'] = 'SlateGray4'
@@ -93,6 +93,7 @@ class Interface:
 
 
   def enviar(self):
+    #Verificando se os dados foram informados antes de enviar ao servidor
     if self.peso.get() and self.altura.get():
       self.feedback["fg"] = "green" 
       self.pesoLabel["fg"] = "black"
@@ -112,6 +113,7 @@ class Interface:
       clientSocket.send(pickle.dumps(dadosCalc))
       result = pickle.loads(clientSocket.recv(1024))
 
+      #Mostrando resultado assim que receber do servidor
       if result:
         self.showResult()
         if self.calcs > 0:
